@@ -1,10 +1,21 @@
 package com.waelsworld.paymentservice.services;
 
+import com.stripe.exception.StripeException;
+import com.waelsworld.paymentservice.controllers.PaymentController;
 import com.waelsworld.paymentservice.dtos.InitiatePaymentRequestDto;
+import com.waelsworld.paymentservice.paymentgateways.AvailablePaymentGateway;
+import com.waelsworld.paymentservice.paymentgateways.PaymentGateway;
+import com.waelsworld.paymentservice.paymentgateways.PaymentGatewayStrategySelector;
 import org.springframework.stereotype.Service;
 
 @Service
 public class PaymentService {
-    public String initiatePayment(InitiatePaymentRequestDto request) {
+    PaymentGatewayStrategySelector paymentGatewayStrategySelector;
+    public PaymentService(PaymentGatewayStrategySelector paymentGatewayStrategySelector) {
+        this.paymentGatewayStrategySelector = paymentGatewayStrategySelector;
+    }
+    public String initiatePayment(InitiatePaymentRequestDto request) throws StripeException {
+        PaymentGateway paymentGateway = paymentGatewayStrategySelector.getPaymentGateway(AvailablePaymentGateway.STRIPE);
+        return paymentGateway.generatePaymentUrl(request);
     }
 }
