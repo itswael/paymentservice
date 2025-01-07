@@ -1,5 +1,6 @@
 package com.waelsworld.paymentservice.services;
 
+import com.razorpay.RazorpayException;
 import com.stripe.exception.StripeException;
 import com.waelsworld.paymentservice.controllers.PaymentController;
 import com.waelsworld.paymentservice.dtos.InitiatePaymentRequestDto;
@@ -14,7 +15,7 @@ public class PaymentService {
     public PaymentService(PaymentGatewayStrategySelector paymentGatewayStrategySelector) {
         this.paymentGatewayStrategySelector = paymentGatewayStrategySelector;
     }
-    public String initiatePayment(InitiatePaymentRequestDto request) throws StripeException {
+    public String initiatePayment(InitiatePaymentRequestDto request) throws StripeException, RazorpayException {
         PaymentGateway paymentGateway = paymentGatewayStrategySelector.getPaymentGateway(AvailablePaymentGateway.STRIPE);
         return paymentGateway.generatePaymentUrl(request);
     }

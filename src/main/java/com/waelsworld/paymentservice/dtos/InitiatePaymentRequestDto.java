@@ -10,4 +10,7 @@ public class InitiatePaymentRequestDto {
     String currency;
     Long unitAmount;
     String name;
+    String orderId;
+    String contact;
+    String email;
 }
